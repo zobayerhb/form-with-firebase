@@ -1,6 +1,41 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase.init";
+import { useState } from "react";
+
 const SignUp = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [userSuccess, setUserSuccess] = useState(false);
+
   const handleSignUp = (event) => {
     event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    setErrorMessage("");
+    setUserSuccess(false);
+
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters or more!");
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      setErrorMessage(
+        "password should be at least one uppercase, one lowercase, one number, one special character"
+      );
+      return;
+    }
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result);
+        setUserSuccess(true);
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+        setErrorMessage(error.message);
+      });
   };
 
   return (
@@ -14,6 +49,7 @@ const SignUp = () => {
             </label>
             <input
               type="email"
+              name="email"
               placeholder="email"
               className="input input-bordered"
               required
@@ -25,6 +61,7 @@ const SignUp = () => {
             </label>
             <input
               type="password"
+              name="password"
               placeholder="password"
               className="input input-bordered"
               required
@@ -39,6 +76,12 @@ const SignUp = () => {
             <button className="btn btn-primary">Sign Up</button>
           </div>
         </form>
+        {errorMessage && (
+          <p className="text-red-500 font-bold">{errorMessage}</p>
+        )}
+        {userSuccess && (
+          <p className="text-success font-bold">User successfully added</p>
+        )}
       </div>
     </div>
   );
