@@ -2,21 +2,20 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.init";
 
 const Register = () => {
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
-        const email = event.target.email.value;
-        const password = event.target.password.value;
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
 
-       createUserWithEmailAndPassword(auth, email, password)
-       .then(res => {
-        console.log(res.user)
-       })
-       .catch(error => {
-        console.log("ERROR", error)
-        console.log(error.message)
-       })
-
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        console.log(res.user);
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+        console.log(error.message);
+      });
+  };
   return (
     <div className="max-w-lg mx-auto">
       <h1 className="text-4xl my-5">Register</h1>
