@@ -17,7 +17,11 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);
-        setSuccess(true);
+        if (!userCredential.user.emailVerified) {
+          setErrorMessage("Please verified your email first....");
+        } else {
+          setSuccess(true);
+        }
       })
       .catch((error) => {
         console.log("ERROR", error.message);
@@ -71,7 +75,7 @@ const Login = () => {
             </div>
           </form>
           {success && (
-            <p className="text-success font-bold">User successfully sign in</p>
+            <p className="text-success font-bold">User successfully login</p>
           )}
           {errorMessage && (
             <p className="text-warning font-bold">{errorMessage}</p>
